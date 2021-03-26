@@ -11,30 +11,28 @@
           </div>
           <div class="right-box">
             <div class="nav-list">
-              <el-input
+               <el-input
                 placeholder="请输入商品信息"
                 suffix-icon="el-icon-search"
-                v-model="productInfo"
-                minlength="1"
-                maxlength="100"
-              ></el-input>
+                v-model="productInfo">
+              </el-input>
               <router-link to="/goods">全部商品</router-link>
-              <router-link to="/thanks">捐赠</router-link>
+              <router-link to="/thanks">感谢</router-link>
             </div>
 
             <div class="nav-aside">
               <!-- 用户 -->
               <div class="user pr">
                 <router-link to="/user">个人中心</router-link>
-                <div class="nav-user-wrapper pa" v-if="login">
+                <div class="nav-user-wrapper pa">
                   <div class="nav-user-list">
                     <ul>
                       <!-- 头像 -->
                       <li class="nav-user-avatar">
                         <div>
-                          <span class="avatar" :style="{backgroundImage:'url('+userInfo.file+')'}"></span>
+                          <span class="avatar"></span>
                         </div>
-                        <p class="name">{{userInfo.username}}</p>
+                        <p class="name">小马哥</p>
                       </li>
                       <li>
                         <router-link to="/user/orderList">我的订单</router-link>
@@ -52,7 +50,7 @@
                         <router-link to="/user/coupon">我的优惠</router-link>
                       </li>
                       <li>
-                        <a href="javascript:;" @click="logout">退出</a>
+                        <a href="javascript:;">退出</a>
                       </li>
                     </ul>
                   </div>
@@ -60,39 +58,35 @@
               </div>
 
               <!-- 购物车 -->
-              <div
-                class="shop pr"
-                @mouseenter="cartShowState(true)"
-                @mouseleave="cartShowState(false)"
-              >
+              <div class="shop pr">
                 <router-link to="/cart"></router-link>
                 <span class="cart-num">
-                  <i class="num" :class="{no:totalNum == 0}">{{totalNum}}</i>
+                  <i class="num">20</i>
                 </span>
 
                 <!-- 购物车显示 -->
-                <div class="nav-user-wrapper pa active" v-show="showCart">
+                <div class="nav-user-wrapper pa">
                   <div class="nav-user-list">
                     <div class="full">
                       <div class="nav-cart-items">
                         <ul>
-                          <li class="clearfix" v-for="(goods,index) in cartList" :key="index">
+                          <li class="clearfix">
                             <div class="cart-item">
                               <div class="cart-item-inner">
                                 <a>
                                   <div class="item-thumb">
-                                    <img :src="goods.productImageBig">
+                                    <img src>
                                   </div>
                                   <div class="item-desc">
                                     <div class="cart-cell">
                                       <h4>
-                                        <a href>{{goods.productName}}</a>
+                                        <a href>哈哈哈</a>
                                       </h4>
                                       <!-- <p class="attrs"><span>白色</span></p> -->
                                       <h6>
                                         <span class="price-icon">¥</span>
-                                        <span class="price-num">{{goods.salePrice}}</span>
-                                        <span class="item-num">x {{goods.productNum}}</span>
+                                        <span class="price-num">商品价格</span>
+                                        <span class="item-num">商品数量</span>
                                       </h6>
                                     </div>
                                   </div>
@@ -107,19 +101,19 @@
                       <div class="nav-cart-total">
                         <p>
                           共
-                          <strong>{{totalNum}}</strong> 件商品
+                          <strong>xxx</strong> 件商品
                         </p>
                         <h5>
                           合计：
                           <span class="price-icon">¥</span>
-                          <span class="price-num">{{totalPrice}}</span>
+                          <span class="price-num">总计价格</span>
                         </h5>
                         <h6>
                           <el-button type="danger">去购物车</el-button>
                         </h6>
                       </div>
                     </div>
-                    <div style="height: 313px;text-align: center" class="cart-con" v-if='!totalNum'>
+                    <div style="height: 313px;text-align: center" class="cart-con">
                       <p>您的购物车竟然是空的!</p>
                     </div>
                   </div>
@@ -150,14 +144,20 @@
 
 <script>
 export default {
+  data () {
+    return {
+      productInfo : ''
+    }
+  },
   created() {}
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/style/eme";
-@import "../assets/style/mixin";
+@import "../assets/style/theme.scss";
+@import "../assets/style/mixin.scss";
 .w-box .nav-list .el-input {
+  // 微调输入框的位置
   margin-right: 10px;
 }
 .header-box {

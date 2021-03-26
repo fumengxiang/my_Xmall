@@ -5,5 +5,5 @@ module.exports={
             warning: false,
             errors: false
         }
-    },
+    }
 }
