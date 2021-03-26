@@ -1,14 +1,29 @@
 <template>
   <div class="home">
     <div class="banner">
-    <el-carousel indicator-position="outside" height="480px">
-        <el-carousel-item v-for="item in 4" :key="item">
-          <h3>{{ item }}</h3>
+    <el-carousel trigger="click" indicator-position="outside" height="480px">
+      <!-- 将图片数据放入数组后，要展示图片只要遍历存放图片的数组即可 -->
+        <el-carousel-item v-for="item in banner" :key="item.id">
+          <!-- 由于图片是由多张叠加而成，而且图片的数量还有不同 -->
+          <img v-if="item.picUrl" :src="item.picUrl" class="img1" alt="手机图片">
+          <img v-if="item.picUrl1" :src="item.picUrl1" class="img2 a" alt="手机图片1">
+          <img v-if="item.picUrl2" :src="item.picUrl2" class="img3 b" alt="手机图片2">
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div>
-      <div class="activity-panel">
+    <div v-for="item in homeList" :key="item.id">
+      <div class="activity-panel" v-if="item.type === 1">
+        <!-- 只需要活动板块的内容 -->
+        <el-row>
+          <el-col class="content" :span="8" v-for="o in item.panelContents" :key="o">
+            <el-card :body-style="{ padding: '0px' }">
+              <img 
+              :src="o.picUrl" 
+              class="i">
+              <a href="#" class="cover-link"></a>
+            </el-card>
+          </el-col>
+        </el-row>
       </div>
       <!-- 商品title -->
       <section class="w mt30 clearfix"></section>
@@ -22,6 +37,8 @@ export default {
   name: 'home',
   data () {
     return {
+      banner: [],
+      homeList: []
     }
   },
   props: {
@@ -32,7 +49,18 @@ export default {
   },
   computed: {
   },
-  created () {},
+  // 组件挂载完成就请求接口数据
+  async created () {
+    const res = await this.$http.get("/api/goods/home")
+    let data = res.data
+    if (data.code === 200) {
+      let result = data.result
+      this.homeList = result
+      // 根据type来寻找轮播图数组中的一项，因为轮播图一共有三组数据，每个照片是由三张照片叠加而成
+      let item = result.find(item => item.type === 0)
+      this.banner = item.panelContents
+    }
+  },
   mounted () {}
 }
 </script>

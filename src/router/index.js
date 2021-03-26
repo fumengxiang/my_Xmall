@@ -17,7 +17,7 @@ const routes = [
     // 子路由的路径不用写分号
     children: [
       {
-        path: 'home',
+        path: '/home',
         component: Home
       },
       {
