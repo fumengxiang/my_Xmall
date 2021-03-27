@@ -26,13 +26,31 @@
         </el-row>
       </div>
       <!-- 商品title -->
-      <section class="w mt30 clearfix"></section>
-      <section class="w mt30 clearfix"></section>
+      <section class="w mt30 clearfix" v-if="item.type === 2">
+        <m-shelf :title="item.name">
+          <div slot="content" class="hot">
+            <mall-goods v-for="(o, i) in item.panelContents" :key="i" :goods="o"></mall-goods>
+          </div>
+        </m-shelf>
+      </section>
+      <section class="w mt30 clearfix" v-if="item.type === 3">
+         <m-shelf :title="item.name">
+          <div slot="content" class="floors">
+            <div class="imgbanner" v-for="(o, j) in item.panelContents" :key="j" 
+            v-if="o.type===2 || o.type === 3">
+              <img :src="o.picUrl" alt="">
+            </div>
+            <mall-goods :goods="o" v-for="(o, i) in item.panelContents" :key="i" v-if="o.type===0"></mall-goods>
+          </div>
+        </m-shelf>
+      </section>
     </div>
   </div>
 </template>
 
 <script>
+import MShelf from "@/components/Shelf.vue";
+import MallGoods from "@/components/MallGoods.vue";
 export default {
   name: 'home',
   data () {
@@ -46,8 +64,8 @@ export default {
   methods: {
   },
   components: {
-  },
-  computed: {
+    MShelf,
+    MallGoods
   },
   // 组件挂载完成就请求接口数据
   async created () {
