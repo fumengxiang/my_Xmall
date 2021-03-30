@@ -12,7 +12,7 @@
         <div class="good-price pr">
           <div class="ds pa">
             <a href='javascript:;'>
-              <el-button type="default" size="medium">查看详情</el-button>
+              <el-button type="default" size="medium" @click="productDetail(goods.productId)">查看详情</el-button>
             </a>
             <a href="javascript:;">
               <el-button
@@ -38,17 +38,17 @@ export default {
   computed: {
     // ...mapState(["login"])
   },
-  // methods: {
+  methods: {
   //   // ...mapMutations(['ADDCART']),
-  //   productDetail(id) {
-  //     // 编程式导航
-  //     this.$router.push({
-  //       name: 'goodsDetail',
-  //       query:{
-  //         productId:id
-  //       }
-  //     });
-  //   },
+    productDetail(id) {
+      // 编程式导航
+      this.$router.push({
+        name: 'goodsDetails',
+        query:{
+          productId:id
+        }
+      });
+    },
   //   addCart(id, price, name, img) {
   //     if (this.login) {
   //       // 用户已登录
@@ -75,7 +75,7 @@ export default {
   //       })
   //     }
   //   }
-  // }
+  }
 };
 </script>
 

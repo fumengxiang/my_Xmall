@@ -5,6 +5,7 @@ import Login from '@/views/Login'
 import Home from '@/views/Home'
 import Goods from '@/views/Goods'
 import Thanks from '@/views/Thanks'
+import GoodsDetails from '@/views/GoodsDetails'
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
       {
         path: '/thanks',
         component: Thanks
+      },
+      {
+        path: '/goodsDetails',
+        name: 'goodsDetails',
+        component: GoodsDetails
       }
     ]
   },

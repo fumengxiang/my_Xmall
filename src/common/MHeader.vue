@@ -65,7 +65,7 @@
                 </span>
 
                 <!-- 购物车显示 -->
-                <div class="nav-user-wrapper pa">
+                <div class="nav-user-wrapper pa active">
                   <div class="nav-user-list">
                     <div class="full">
                       <div class="nav-cart-items">
