@@ -4,7 +4,7 @@
       <el-card :body-style="{padding: 0}">
         <div class="good-img">
           <a>
-            <img :src="goods.productImageBig" alt>
+            <img v-lazy="goods.productImageBig" alt>
           </a>
         </div>
         <h6 class="good-title">{{goods.productName}}</h6>

@@ -94,7 +94,7 @@ export default {
         const res = await this.$http.get(
           `/api/goods/productDet?productId=${this.$route.query.productId}`
         );
-        console.log(res);
+        // console.log(res);
         this.product = res.data;
         this.small = this.product.productImageSmall;
         // 默认第一张为大图

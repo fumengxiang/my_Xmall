@@ -61,7 +61,7 @@
               <div class="shop pr" @mouseenter="cartShowState(true)" @mouseleave="cartShowState(false)">
                 <router-link to="/cart"></router-link>
                 <span class="cart-num">
-                  <i class="num">20</i>
+                  <i class="num" :class="{no: !cartGoodsNum}">{{cartGoodsNum}}</i>
                 </span>
 
                 <!-- 购物车显示 -->
@@ -70,23 +70,23 @@
                     <div class="full">
                       <div class="nav-cart-items">
                         <ul>
-                          <li class="clearfix">
+                          <li class="clearfix" v-for="(goods, index) in cartList" :key="index">
                             <div class="cart-item">
                               <div class="cart-item-inner">
                                 <a>
                                   <div class="item-thumb">
-                                    <img src>
+                                    <img :src="goods.productImageBig">
                                   </div>
                                   <div class="item-desc">
                                     <div class="cart-cell">
                                       <h4>
-                                        <a href>哈哈哈</a>
+                                        <a href>{{goods.productName}}</a>
                                       </h4>
                                       <!-- <p class="attrs"><span>白色</span></p> -->
                                       <h6>
                                         <span class="price-icon">¥</span>
-                                        <span class="price-num">商品价格</span>
-                                        <span class="item-num">商品数量</span>
+                                        <span class="price-num">{{goods.salePrice}}</span>
+                                        <span class="item-num">x {{goods.productNum}}</span>
                                       </h6>
                                     </div>
                                   </div>
@@ -101,19 +101,19 @@
                       <div class="nav-cart-total">
                         <p>
                           共
-                          <strong>xxx</strong> 件商品
+                          <strong>{{cartGoodsNum}}</strong> 件商品
                         </p>
                         <h5>
                           合计：
                           <span class="price-icon">¥</span>
-                          <span class="price-num">总计价格</span>
+                          <span class="price-num">{{totalPrice}}</span>
                         </h5>
                         <h6>
                           <el-button type="danger">去购物车</el-button>
                         </h6>
                       </div>
                     </div>
-                    <div style="height: 313px;text-align: center" class="cart-con">
+                    <div style="height: 313px;text-align: center" class="cart-con" v-if="!cartGoodsNum">
                       <p>您的购物车竟然是空的!</p>
                     </div>
                   </div>
@@ -144,7 +144,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import {removeStore} from '@/utils/storage'
+import {removeStore, getStore, setStore} from '@/utils/storage'
 export default {
   data () {
     return {
@@ -153,11 +153,24 @@ export default {
   },
   computed: {
     // mapState是对vuex状态的变量的映射，可以获取在计算属性中获取相应的状态
-    ...mapState(['login', 'userInfo', 'cartList', 'showCart'])
+    ...mapState(['login', 'userInfo', 'cartList', 'showCart']),
+    cartGoodsNum() {
+      let sum = 0
+      this.cartList.forEach(item => {
+        sum += item.productNum
+      })
+      return sum
+    },
+    totalPrice() {
+      return this.cartList && this.cartList.reduce((total, item) => {
+        total += item.productNum * item.salePrice
+        return total
+      }, 0)
+    }
   },
   methods: {
     // 通过mapMutations获取vuex中同步修改状态的方法
-    ...mapMutations(['SHOWCART']),
+    ...mapMutations(['SHOWCART', 'INITBUYCART']),
     cartShowState(state) {
       this.SHOWCART({
         // 将showCart与形参state绑定到一起
@@ -166,10 +179,22 @@ export default {
     },
     logout () {
       removeStore('token')
+      removeStore('buyCart')
       window.location.href = '/'
     }
   },
-  created() {}
+  async mounted() {
+    // console.log(this.login);
+    if (this.login) {
+      const res = await this.$http.post('/api/cartList', { userId: getStore('id') })
+      if (res.data.success === true) {
+        setStore('buyCart', res.data.cartList.cartList)
+        this.INITBUYCART()
+      }
+    } else {
+      this.INITBUYCART()
+    }
+  }
 };
 </script>
 

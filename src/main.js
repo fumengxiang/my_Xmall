@@ -3,7 +3,16 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './plugins/element.js';
+// 导入图片的懒加载
+import VueLazyload from 'vue-lazyload'
 import {getStore} from '@/utils/storage'
+Vue.use(VueLazyload)
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: 'static/images/error.png',
+  loading: 'static/images/load.gif',
+  attempt: 1
+})
 // 挂载axios到Vue原型中，以便所有的组件都可以以this.$http的形式访问axios
 import axios from "axios";
 Vue.prototype.$http = axios
@@ -41,11 +50,17 @@ router.beforeEach((to, from, next) => {
       }
     } else {
       store.commit('ISLOGIN', data)
+      // 因为用户已经登录，当用户再次访问登录界面时，使其重定向到主界面
+      if (to.path === '/login') {
+        router.push({
+          path: '/'
+        })
+      }
+      next()
     }
   }).catch(err => {
     console.log(err);
   })
-  next()
 })
 
 new Vue({

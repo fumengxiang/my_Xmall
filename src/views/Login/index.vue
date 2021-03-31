@@ -56,14 +56,14 @@ export default {
     };
   },
   mounted() {
-    //缓存当前购物车中的数据
+    //缓存当前购物车中的数据, 使用户在登录之前加入购物车的商品能够与登录后原来存在的商品一起在购物车显示
     this.login_addCart();
   },
   methods: {
     login_addCart() {
       let cartArr = [];
       let localCart = JSON.parse(getStore("buyCart"));
-      console.log(localCart);
+      // console.log(localCart);
 
       if (localCart && localCart.length) {
         localCart.forEach(item => {
@@ -87,19 +87,22 @@ export default {
             //  持久化 存储
             setStore("token", token);
             setStore("id", id);
-            console.log(this.cart);
+            // console.log(this.cart);
 
             if (this.cart && this.cart.length) {
               this.cart.forEach(async item => {
+                // 将缓存的购物车数据加入到后端的购物车中
                 let res = await this.$http.post("/api/addCart", item);
                 if (res.data.success === true) {
-                  //.......
+                  console.log('购物车数据添加成功');
                 }
                 removeStore("buyCart");
+                // 登录后跳转路由
                 this.$router.push({ path: "/" });
               });
             } else {
-              this.$router.push({path: "/"});
+              // 即使购物车中没有商品，也需要跳转路由
+              this.$router.push({path: '/'});
             }
           }
         } else {
