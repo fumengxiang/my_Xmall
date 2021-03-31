@@ -24,15 +24,15 @@
               <!-- 用户 -->
               <div class="user pr">
                 <router-link to="/user">个人中心</router-link>
-                <div class="nav-user-wrapper pa">
+                <div class="nav-user-wrapper pa" v-if="login">
                   <div class="nav-user-list">
                     <ul>
                       <!-- 头像 -->
                       <li class="nav-user-avatar">
                         <div>
-                          <span class="avatar"></span>
+                          <span class="avatar" :style="{backgroundImage:'url('+userInfo.file+')'}"></span>
                         </div>
-                        <p class="name">小马哥</p>
+                        <p class="name">{{userInfo.username}}</p>
                       </li>
                       <li>
                         <router-link to="/user/orderList">我的订单</router-link>
@@ -50,7 +50,7 @@
                         <router-link to="/user/coupon">我的优惠</router-link>
                       </li>
                       <li>
-                        <a href="javascript:;">退出</a>
+                        <a href="javascript:;" @click="logout">退出</a>
                       </li>
                     </ul>
                   </div>
@@ -58,14 +58,14 @@
               </div>
 
               <!-- 购物车 -->
-              <div class="shop pr">
+              <div class="shop pr" @mouseenter="cartShowState(true)" @mouseleave="cartShowState(false)">
                 <router-link to="/cart"></router-link>
                 <span class="cart-num">
                   <i class="num">20</i>
                 </span>
 
                 <!-- 购物车显示 -->
-                <div class="nav-user-wrapper pa active">
+                <div class="nav-user-wrapper pa active" v-if="showCart">
                   <div class="nav-user-list">
                     <div class="full">
                       <div class="nav-cart-items">
@@ -143,10 +143,30 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+import {removeStore} from '@/utils/storage'
 export default {
   data () {
     return {
       productInfo : ''
+    }
+  },
+  computed: {
+    // mapState是对vuex状态的变量的映射，可以获取在计算属性中获取相应的状态
+    ...mapState(['login', 'userInfo', 'cartList', 'showCart'])
+  },
+  methods: {
+    // 通过mapMutations获取vuex中同步修改状态的方法
+    ...mapMutations(['SHOWCART']),
+    cartShowState(state) {
+      this.SHOWCART({
+        // 将showCart与形参state绑定到一起
+        showCart:state
+      })
+    },
+    logout () {
+      removeStore('token')
+      window.location.href = '/'
     }
   },
   created() {}

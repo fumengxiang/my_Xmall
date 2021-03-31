@@ -18,6 +18,7 @@
               <el-button
                 type="primary"
                 size="medium"
+                @click="addCart(goods.productId, goods.salePrice, goods.productName, goods.productImageBig)"
               >加入购物车</el-button>
             </a>
           </div>
@@ -31,15 +32,15 @@
   </el-row>
 </template>
 <script>
-// import { mapState,mapMutations } from "vuex";
-// import { getStore } from "@/utils/storage";
+import { mapState,mapMutations } from "vuex";
+import { getStore } from "@/utils/storage";
 export default {
   props: ["goods"],
   computed: {
-    // ...mapState(["login"])
+    ...mapState(["login"])
   },
   methods: {
-  //   // ...mapMutations(['ADDCART']),
+    ...mapMutations(['ADDCART']),
     productDetail(id) {
       // 编程式导航
       this.$router.push({
@@ -49,32 +50,32 @@ export default {
         }
       });
     },
-  //   addCart(id, price, name, img) {
-  //     if (this.login) {
-  //       // 用户已登录
-  //       this.$http.post("/api/addCart", {
-  //         userId: getStore("id"),
-  //         productId:id,
-  //         productNum:1
-  //       });
-  //       // 已经存储到后端中， 将当前的商品存储到store的cartList
-  //       this.ADDCART({
-  //         productId:id,
-  //         salePrice:price,
-  //         productName:name,
-  //         productImageBig:img
-  //       })
+    addCart(id, price, name, img) {
+      if (this.login) {
+        // 用户已登录
+        this.$http.post("/api/addCart", {
+          userId: getStore("id"),
+          productId:id,
+          productNum:1
+        });
+        // 已经存储到后端中， 将当前的商品存储到store的cartList
+        this.ADDCART({
+          productId:id,
+          salePrice:price,
+          productName:name,
+          productImageBig:img
+        })
 
-  //     }else{
-  //       // 如果用户未登录 也要将商品存储到store的cartList
-  //       this.ADDCART({
-  //         productId:id,
-  //         salePrice:price,
-  //         productName:name,
-  //         productImageBig:img
-  //       })
-  //     }
-  //   }
+      }else{
+        // 如果用户未登录 也要将商品存储到store的cartList
+        this.ADDCART({
+          productId:id,
+          salePrice:price,
+          productName:name,
+          productImageBig:img
+        })
+      }
+    }
   }
 };
 </script>
